@@ -18,7 +18,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Маршрут для обробки POST запитів
-app.post('/api', (req, res) => {
+app.post('/api/pageView', (req, res) => {
   const data = req.body; // Дані, які прийшли з запиту
   console.log(data);
 
