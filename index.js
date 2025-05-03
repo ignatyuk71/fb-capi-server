@@ -5,6 +5,8 @@ const port = process.env.PORT || 3000;
 
 // Middleware для парсингу JSON
 app.use(express.json());
+const ACCESS_TOKEN = 'EAAHpt1ZAxmGMBOzABEDWhxxZBo9EcoBm5ajU15KJFlsYdNtetbbEhHVvQoZCZAmXDI4KYZCIZB1o0rKxI6TTP9ZCLZBKMlrYTuYEHBfma1hrzaeidZAKSyyEjwxsOZB3b36VtOVPW25jOvjPoDAP7jPB1BUO9JpUX0HTj8ZAsYduUMQ9wTq8fhRli3FTZACp5U8CkOQsMwZDZD';  // Замініть на свій токен
+const PIXEL_ID = '1667929657386446';  // Замініть на свій Pixel ID
 
 // Налаштування CORS
 const corsOptions = {
