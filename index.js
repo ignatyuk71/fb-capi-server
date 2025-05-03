@@ -5,8 +5,12 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors()); // Дозволяє доступ з інших доменів
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://dream-v-doma.tilda.ws"); // дозволяє доступ тільки з цього домену
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // дозволяє ці методи
+  res.header("Access-Control-Allow-Headers", "Content-Type"); // дозволяє ці заголовки
+  next(); // Перехід до наступного обробника запиту
+});
 app.use(bodyParser.json()); // Для розбору JSON в тілі запиту
 
 // Маршрут для обробки PageView події
@@ -22,19 +26,7 @@ aapp.post('/api/pageView', (req, res) => {
   res.status(200).json({ message: 'PageView event data received successfully' });
 });
 
-// Маршрут для обробки інших подій (наприклад, AddToCart, Purchase і т.д.)
-app.post('/api/addToCart', (req, res) => {
-  const eventData = req.body;
 
-  if (!eventData || !eventData.data) {
-    return res.status(400).json({ error: 'Missing event data' });
-  }
-
-  console.log('Received AddToCart event data:', JSON.stringify(eventData));
-
-  // Тут можна обробити або відправити дані до Facebook API
-  res.status(200).json({ message: 'AddToCart event data received successfully' });
-});
 
 // Запуск сервера
 app.listen(port, () => {
