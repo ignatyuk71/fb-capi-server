@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fetch = require('node-fetch');  // Додано для використання fetch
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -20,8 +21,9 @@ app.use(cors(corsOptions));
 // Маршрут для обробки POST запитів
 app.post('/api/pageView', (req, res) => {
   const data = req.body;
-
-  console.log('data:', JSON.stringify(data));
+  
+  // Виведення отриманих даних
+  console.log('Received data:', JSON.stringify(data));
 
   const eventData = {
     "data": [
@@ -29,7 +31,7 @@ app.post('/api/pageView', (req, res) => {
         "action_source": "website",
         "event_id": 111112245,  
         "event_name": "PageView", 
-        "event_time": 1746301386,
+        "event_time": Math.floor(Date.now() / 1000), // Використовуємо поточний час
         "user_data": {
           "client_user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1",
           "em": "f660ab912ec121d1b1e928a0bb4bc61b15f5ad44d5efdc4e1c92a25e99b8e44a" 
@@ -38,23 +40,39 @@ app.post('/api/pageView', (req, res) => {
     ],
     "test_event_code": "TEST39582"
   };
-  
 
   // Відправка даних на Facebook
-fetch(`https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(eventData),
-})
-  .then(response => response.json())
-  .then(data => {
-    console.log('Facebook API Response:', data);  // Логування відповіді від Facebook
+  fetch(`https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(eventData),
   })
-  .catch(error => {
-    console.error('Error:', error);  // Логування помилок
-  });
+    .then(response => response.json())
+    .then(data => {
+      console.log('Facebook API Response:', data);  // Логування відповіді від Facebook
+
+      if (data.error) {
+        // Якщо помилка від Facebook, вивести її
+        console.error('Error from Facebook:', data.error);
+        res.status(500).json({ status: 'error', message: data.error.message });
+      } else {
+        // Якщо все успішно
+        res.status(200).json({
+          status: 'success',
+          fb_response: data,
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);  // Логування помилок
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to send event to Facebook',
+        error: error.message,
+      });
+    });
 });
 
 // Старт сервера
