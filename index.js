@@ -10,7 +10,8 @@ app.use(cors()); // Дозволяє доступ з інших доменів
 app.use(bodyParser.json()); // Для розбору JSON в тілі запиту
 
 // Маршрут для обробки PageView події
-app.post('/api/pageView', (req, res) => {
+aapp.post('/api/pageView', (req, res) => {
+  console.log('Request received at /api/pageView');
   const eventData = req.body;
 
   if (!eventData || !eventData.data) {
@@ -18,8 +19,6 @@ app.post('/api/pageView', (req, res) => {
   }
 
   console.log('Received PageView event data:', JSON.stringify(eventData));
-
-  // Тут можна обробити або відправити дані до Facebook API
   res.status(200).json({ message: 'PageView event data received successfully' });
 });
 
