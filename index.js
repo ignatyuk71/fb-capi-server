@@ -20,12 +20,42 @@ app.post('/api/pageView', (req, res) => {
   const data = req.body;
   console.log(data);
 
-  // Відповідь на запит
-  res.status(200).json({
-    status: 'success',
-    message: 'POST request received',
-    data: data,
-  });
+
+    const eventData = {
+    data: [
+      {
+        event_name: 'PageView',
+        event_time: Math.floor(Date.now() / 1000),  // Час в форматі UNIX
+        event_id: 'abc123',  // Ідентифікатор події
+        user_data: {
+          client_user_agent: req.headers['user-agent'], // Отримуємо user-agent
+        },
+      },
+    ],
+  };
+
+  // Відправляємо дані на Facebook
+  fetch(`https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eventData),
+  })
+    .then(fbRes => fbRes.json())
+    .then(fbData => {
+      // Відповідаємо клієнту про успіх
+      res.status(200).json({
+        status: 'success',
+        fb_response: fbData,
+      });
+    })
+    .catch(error => {
+      console.error('Facebook API Error:', error);
+      res.status(500).json({
+        status: 'error',
+        message: 'Failed to send event to Facebook',
+        error: error.message,
+      });
+    });
 });
 
 // Старт сервера
