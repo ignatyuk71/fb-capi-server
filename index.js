@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -16,7 +14,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
 
 
 
@@ -37,47 +34,4 @@ app.post('/api/pageView11', (req, res) => {
     message: 'POST request received',
     data: data,
   });
-});
-
-
-
-
-// Логування події
-const logEventData = (eventData) => {
-    console.log('Event Data---:', JSON.stringify(eventData, null, 2));
-};
-
-// Відправка події в Facebook
-const sendToFacebook = async (eventData) => {
-    const url = `https://graph.facebook.com/v22.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`;
-    try {
-        const response = await axios.post(url, eventData);
-        console.log('Event sent to Facebook:', response.data);
-    } catch (error) {
-        console.error('Error sending event to Facebook:', error.response?.data || error.message);
-    }
-};
-
-// Маршрут для отримання події PageView
-app.post('/api/pageView', (req, res) => {
-  const eventData = req.body;  // Отримуємо дані з тіла запиту
-  console.log('Received Event Data:', eventData);
-
-  // Логуємо отримані дані
-  logEventData(eventData);
-
-  // Відправляємо дані у Facebook (якщо потрібно)
-  sendToFacebook(eventData);
-
-  // Відповідаємо клієнту, що все пройшло успішно
-  res.status(200).send({ status: 'Received and processed' });
-});
-
-
-
-
-
-// Старт сервера
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });
