@@ -27,12 +27,12 @@ app.post('/api/pageView', (req, res) => {
     "data": [
       {
         "action_source": "website",
-        "event_id": 12344444445,
-        "event_name": "PageView",
+        "event_id": 111112245,  
+        "event_name": "PageView", 
         "event_time": 1746301386,
         "user_data": {
           "client_user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1",
-          "em": "f660ab912ec121d1b1e928a0bb4bc61b15f5ad44d5efdc4e1c92a25e99b8e44a"
+          "em": "f660ab912ec121d1b1e928a0bb4bc61b15f5ad44d5efdc4e1c92a25e99b8e44a" 
         }
       }
     ],
@@ -40,31 +40,21 @@ app.post('/api/pageView', (req, res) => {
   };
   
 
-  // Відправляємо дані на Facebook
-  fetch('https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(eventData),
+  // Відправка даних на Facebook
+fetch(`https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(eventData),
+})
+  .then(response => response.json())
+  .then(data => {
+    console.log('Facebook API Response:', data);  // Логування відповіді від Facebook
   })
-    .then(fbRes => fbRes.json())
-    .then(fbData => {
-
-      console.log('Facebook API Response:', fbData);
-
-      // Відповідаємо клієнту про успіх
-      res.status(200).json({
-        status: 'success',
-        fb_response: fbData,
-      });
-    })
-    .catch(error => {
-      console.error('Facebook API Error:', error);
-      res.status(500).json({
-        status: 'error',
-        message: 'Failed to send event to Facebook',
-        error: error.message,
-      });
-    });
+  .catch(error => {
+    console.error('Error:', error);  // Логування помилок
+  });
 });
 
 // Старт сервера
