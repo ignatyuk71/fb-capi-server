@@ -24,17 +24,21 @@ app.post('/api/pageView', (req, res) => {
   console.log('data:', JSON.stringify(data));
 
   const eventData = {
-    data: [
+    "data": [
       {
-        event_name: "PageView",
-        event_time: Math.floor(Date.now() / 1000), // UNIX timestamp
-        user_data: {
-          client_user_agent: navigator.userAgent,
-          client_ip_address: "192.168.1.1" // Приклад IP, краще визначати на сервері
+        "action_source": "website",
+        "event_id": 12344444445,
+        "event_name": "PageView",
+        "event_time": 1746301386,
+        "user_data": {
+          "client_user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1",
+          "em": "f660ab912ec121d1b1e928a0bb4bc61b15f5ad44d5efdc4e1c92a25e99b8e44a"
         }
       }
-    ]
+    ],
+    "test_event_code": "TEST39582"
   };
+  
 
   // Відправляємо дані на Facebook
   fetch(`https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
