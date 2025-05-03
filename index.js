@@ -19,6 +19,11 @@ app.use(express.json());
 
 app.post('/api/pageView', (req, res) => {
   console.log('📄 PageView:', req.body);
+
+  const parsedData = JSON.parse(body);  // Парсимо отримані дані як JSON
+  
+  console.log('📄 PageView received:', parsedData);  // Логування даних
+
   res.sendStatus(200);
 });
 
