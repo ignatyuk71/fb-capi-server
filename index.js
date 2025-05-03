@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
-
+// 🔐 НЕ зберігай токени в коді — краще використовувати змінні середовища (у .env файлі)
+const ACCESS_TOKEN = process.env.FB_ACCESS_TOKEN || 'EAAS7prt1PmcBOZC4maFzdSz0YIZAHl8BedkCRar8KT2IIFL1ZADNmDpUmePcBcAAoAq9v5xem8Jbv9BEjxvGTs3zjFxbLeiUZA5aFX4GepHU3u0tiFIuEdMLZAv6O6niDRxGPohkXCTmXvo4Pdh0XllJ3l9kSu5PRWINwdq1QGCoHalO2qOMnMOdYX3rd4WYL6eqWVtYb3CXTD2OcPVcHifr2PnjcwuaRngZDZD';
+const PIXEL_ID = process.env.FB_PIXEL_ID || '1667929657386446';
 // Middleware для парсингу JSON
 app.use(express.json());
 
