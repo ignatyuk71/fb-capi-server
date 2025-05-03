@@ -1,47 +1,43 @@
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Додаткові заголовки вручну (CORS)
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://dream-v-doma.tilda.ws");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200); // важливо для preflight
+// Middleware
+app.use(cors()); // Дозволяє доступ з інших доменів
+app.use(bodyParser.json()); // Для розбору JSON в тілі запиту
+
+// Маршрут для обробки PageView події
+app.post('/api/pageView', (req, res) => {
+  const eventData = req.body;
+
+  if (!eventData || !eventData.data) {
+    return res.status(400).json({ error: 'Missing event data' });
   }
 
-  next();
+  console.log('Received PageView event data:', JSON.stringify(eventData));
+
+  // Тут можна обробити або відправити дані до Facebook API
+  res.status(200).json({ message: 'PageView event data received successfully' });
 });
 
-app.use(express.json());
-
-app.post('/api/pageView', (req, res) => {
-  console.log('📄 PageView:', req.body);
-  res.sendStatus(200);
-});
-
+// Маршрут для обробки інших подій (наприклад, AddToCart, Purchase і т.д.)
 app.post('/api/addToCart', (req, res) => {
-  console.log('🛒 AddToCart:', req.body);
-  res.sendStatus(200);
+  const eventData = req.body;
+
+  if (!eventData || !eventData.data) {
+    return res.status(400).json({ error: 'Missing event data' });
+  }
+
+  console.log('Received AddToCart event data:', JSON.stringify(eventData));
+
+  // Тут можна обробити або відправити дані до Facebook API
+  res.status(200).json({ message: 'AddToCart event data received successfully' });
 });
 
-app.post('/api/purchase', (req, res) => {
-  console.log('💰 Purchase:', req.body);
-  res.sendStatus(200);
-});
-
-app.post('/api/initiateCheckout', (req, res) => {
-  console.log('🧾 InitiateCheckout:', req.body);
-  res.sendStatus(200);
-});
-
-app.post('/api/viewContent', (req, res) => {
-  console.log('👁️ ViewContent:', req.body);
-  res.sendStatus(200);
-});
-
+// Запуск сервера
 app.listen(port, () => {
-  console.log(`🚀 Server running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
