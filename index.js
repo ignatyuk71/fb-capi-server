@@ -11,11 +11,11 @@ const PIXEL_ID = process.env.FB_PIXEL_ID || '1667929657386446';
 app.use(express.json());
 
 // Налаштування CORS
-const corsOptions = {
-  origin: 'https://dream-v-doma.tilda.ws', // Замість цього вказуйте свій сайт
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
+app.use(cors({
+  origin: 'https://dream-v-doma.tilda.ws', // Ваш домен
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Додаємо всі методи, які використовуються на сервері
+  allowedHeaders: ['Content-Type', 'Authorization'], // Додайте інші заголовки, якщо потрібно
+}));
 
 app.use(cors(corsOptions));
 
