@@ -41,7 +41,7 @@ app.post('/api/pageView', (req, res) => {
   
 
   // Відправляємо дані на Facebook
-  fetch(`https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
+  fetch('https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(eventData),
@@ -50,7 +50,7 @@ app.post('/api/pageView', (req, res) => {
     .then(fbData => {
 
       console.log('Facebook API Response:', fbData);
-      
+
       // Відповідаємо клієнту про успіх
       res.status(200).json({
         status: 'success',
