@@ -29,7 +29,7 @@ app.post('/api/pageView', (req, res) => {
     "data": [
       {
         "action_source": "website",
-        "event_id": 111112245,  
+        "event_id": 5555555555,  
         "event_name": "PageView", 
         "event_time": Math.floor(Date.now() / 1000), // Використовуємо поточний час
         "user_data": {
@@ -47,7 +47,7 @@ app.post('/api/pageView', (req, res) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(eventData),
   })
     .then(response => response.json())
     .then(data => {
