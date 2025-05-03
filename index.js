@@ -20,20 +20,20 @@ app.use(cors(corsOptions));
 // Маршрут для обробки POST запитів
 app.post('/api/pageView', (req, res) => {
   const data = req.body;
-  console.log(data);
 
+  console.log('data:', JSON.stringify(data));
 
-    const eventData = {
+  const eventData = {
     data: [
       {
-        event_name: 'PageView',
-        event_time: Math.floor(Date.now() / 1000),  // Час в форматі UNIX
-        event_id: 'abc123',  // Ідентифікатор події
+        event_name: "PageView",
+        event_time: Math.floor(Date.now() / 1000), // UNIX timestamp
         user_data: {
-          client_user_agent: req.headers['user-agent'], // Отримуємо user-agent
-        },
-      },
-    ],
+          client_user_agent: navigator.userAgent,
+          client_ip_address: "192.168.1.1" // Приклад IP, краще визначати на сервері
+        }
+      }
+    ]
   };
 
   // Відправляємо дані на Facebook
