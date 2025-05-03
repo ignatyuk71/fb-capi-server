@@ -48,6 +48,9 @@ app.post('/api/pageView', (req, res) => {
   })
     .then(fbRes => fbRes.json())
     .then(fbData => {
+
+      console.log('Facebook API Response:', fbData);
+      
       // Відповідаємо клієнту про успіх
       res.status(200).json({
         status: 'success',
