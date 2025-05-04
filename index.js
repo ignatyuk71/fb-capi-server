@@ -54,7 +54,7 @@ app.post('/api/pageView', async (req, res) => {
         }
       }
     ],
-    test_event_code: "TEST39582"
+    test_event_code: "TEST10696"
   };
 
   try {
