@@ -1,38 +1,70 @@
 const express = require('express');
-const cors = require('cors');
-const axios = require('axios');
+const axios = require('axios'); // Для надсилання запитів до Facebook API
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware для парсингу JSON
+// Для парсингу JSON даних
 app.use(express.json());
-const ACCESS_TOKEN = 'EAAHpt1ZAxmGMBOzABEDWhxxZBo9EcoBm5ajU15KJFlsYdNtetbbEhHVvQoZCZAmXDI4KYZCIZB1o0rKxI6TTP9ZCLZBKMlrYTuYEHBfma1hrzaeidZAKSyyEjwxsOZB3b36VtOVPW25jOvjPoDAP7jPB1BUO9JpUX0HTj8ZAsYduUMQ9wTq8fhRli3FTZACp5U8CkOQsMwZDZD';  // Замініть на свій токен
-const PIXEL_ID = '1667929657386446';  // Замініть на свій Pixel ID
 
-// Налаштування CORS
-const corsOptions = {
-  origin: 'https://dream-v-doma.tilda.ws', // Замість цього вказуйте свій сайт
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
+// Ваш access_token для Facebook Conversions API
+const ACCESS_TOKEN = 'your_facebook_access_token'; // Замініть на ваш access token
+const PIXEL_ID = 'your_facebook_pixel_id'; // Замініть на ваш Pixel ID
 
 // Маршрут для обробки POST запитів
-app.post('/api/pageView', (req, res) => {
-  console.log("📥 Incoming POST request");
-  const data = req.body;
+app.post('/api/pageView', async (req, res) => {
+  const eventData = req.body;
 
-  console.log('📥 Received data:', JSON.stringify(data));
+  // Додавання обов'язкового поля event_time (час події)
+  if (!eventData.data || eventData.data.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Data is required in the request body.'
+    });
+  }
 
-  res.json({
-    success: true,
-    message: 'Event received',
-    received: data
+  // Додавання event_time для кожної події
+  eventData.data.forEach((event) => {
+    if (!event.event_time) {
+      event.event_time = Math.floor(Date.now() / 1000); // Час події в секундах
+    }
   });
+
+  // Виведення отриманих даних для відладки
+  console.log('📥 Received event data:', JSON.stringify(eventData));
+
+  try {
+    // Надсилання події до Facebook Conversions API
+    const response = await axios.post(
+      `https://graph.facebook.com/v12.0/${PIXEL_ID}/events`,
+      eventData,
+      {
+        params: {
+          access_token: ACCESS_TOKEN,
+        },
+      }
+    );
+
+    // Відповідь від Facebook API
+    console.log('📡 Facebook API Response:', response.data);
+
+    return res.json({
+      success: true,
+      message: 'Event successfully sent to Facebook',
+      facebook_response: response.data,
+    });
+  } catch (error) {
+    // Обробка помилок
+    console.error('❌ Error sending data to Facebook:', error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to send event to Facebook',
+      error: error.response ? error.response.data : error.message,
+    });
+  }
 });
 
-// Старт сервера
+// Запуск сервера
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
