@@ -7,8 +7,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Ваш access_token для Facebook Conversions API
-const ACCESS_TOKEN = 'your_facebook_access_token'; // Замініть на ваш access token
-const PIXEL_ID = 'your_facebook_pixel_id'; // Замініть на ваш Pixel ID
+const ACCESS_TOKEN = 'EAAHpt1ZAxmGMBO1sWXommeck8lQv0xNDoKtx4hGCb5aGLqPqQQuxbzmI5aEfZA38JhF26LO4cMHpsKSUfdZCkVqa2cRRQDjfkhvqZCYz7u84tFlFLFjmTzNTA8BZCUOIIPfvx7p2QAiwMzDswH4dbZBECT4nDLZBmXDGaY9pHo3m14ZAgJ5h8OVKZBAZCwNnkCSdr4QAZDZD'; // Замініть на ваш access token
+const PIXEL_ID = '1667929657386446'; // Замініть на ваш Pixel ID
 
 // Маршрут для обробки POST запитів
 app.post('/api/pageView', async (req, res) => {
