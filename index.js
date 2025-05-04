@@ -20,14 +20,14 @@ app.use(cors(corsOptions));
 
 // Маршрут для обробки POST запитів
 app.post('/api/pageView', (req, res) => {
+  console.log("📥 Incoming POST request");
   const data = req.body;
 
   console.log('📥 Received data:', JSON.stringify(data));
 
-  // Тут ти можеш або переслати ці дані в Meta API, або просто логувати
-  res.status(200).json({
+  res.json({
     success: true,
-    message: "Event received",
+    message: 'Event received',
     received: data
   });
 });
