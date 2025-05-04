@@ -1,13 +1,18 @@
+// Імпортуємо необхідні бібліотеки
+require('dotenv').config(); // Завантажує .env змінні
+
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware для парсингу JSON
+// Додаємо middleware для автоматичного парсингу JSON-запитів
 app.use(express.json());
-const ACCESS_TOKEN = 'EAAHpt1ZAxmGMBOzABEDWhxxZBo9EcoBm5ajU15KJFlsYdNtetbbEhHVvQoZCZAmXDI4KYZCIZB1o0rKxI6TTP9ZCLZBKMlrYTuYEHBfma1hrzaeidZAKSyyEjwxsOZB3b36VtOVPW25jOvjPoDAP7jPB1BUO9JpUX0HTj8ZAsYduUMQ9wTq8fhRli3FTZACp5U8CkOQsMwZDZD';  // Замініть на свій токен
-const PIXEL_ID = '1667929657386446';  // Замініть на свій Pixel ID
+
+// 🔐 Facebook Conversions API: токен доступу та ID пікселя
+const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+const PIXEL_ID = process.env.PIXEL_ID;
 
 // Конфігурація CORS — дозволяємо запити тільки з вашого сайту
 const corsOptions = {
