@@ -22,36 +22,14 @@ app.use(cors(corsOptions));
 app.post('/api/pageView', (req, res) => {
   const data = req.body;
 
-  console.log('Received data:', JSON.stringify(data));
+  console.log('📥 Received data:', JSON.stringify(data));
 
-  const eventData = {
-    "data": [
-      {
-        "action_source": "website",
-        "event_id": 111112245,
-        "event_name": "PageView",
-        "event_time": Math.floor(Date.now() / 1000), // Поточний час
-        "user_data": {
-          "client_user_agent": data.userAgent || "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1",
-          "em": "f660ab912ec121d1b1e928a0bb4bc61b15f5ad44d5efdc4e1c92a25e99b8e44a" 
-        }
-      }
-    ],
-    "test_event_code": "TEST39582"
-  };
-
-  console.log('eventData to send:', JSON.stringify(eventData));
-
-  // Відправка події до Facebook Pixel через Facebook Conversions API
-  axios.post(`https://graph.facebook.com/v12.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, eventData)
-    .then(response => {
-      console.log('Facebook response:', response.data);
-      res.status(200).json({ success: true, message: 'Event sent successfully' });
-    })
-    .catch(error => {
-      console.error('Error sending to Facebook:', error);
-      res.status(500).json({ success: false, message: 'Error sending event' });
-    });
+  // Тут ти можеш або переслати ці дані в Meta API, або просто логувати
+  res.status(200).json({
+    success: true,
+    message: "Event received",
+    received: data
+  });
 });
 
 // Старт сервера
