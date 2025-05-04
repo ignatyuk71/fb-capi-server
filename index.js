@@ -46,19 +46,19 @@ app.post('/api/pageView', async (req, res) => {
   const payload = {
     data: [
       {
-        event_name: "PageView", // Назва події
-        event_time: Math.floor(Date.now() / 1000), // Поточний час в UNIX-форматі
-        action_source: "website", // Джерело події
-        event_id: data.event_id || "event_" + Date.now(), // Унікальний ID події
+        event_name: "PageView", 
+        event_time: Math.floor(Date.now() / 1000), 
+        action_source: "website", 
+        event_id: data.event_id || "event_" + Date.now(), 
         user_data: {
-          client_user_agent: data.user_data?.client_user_agent || req.headers['user-agent'], // Інфо про браузер
-          fbp: data.user_data?.fbp, // Facebook browser ID
-          fbc: data.user_data?.fbc, // Facebook click ID
-          external_id: data.user_data?.external_id || "anonymous_user" // Ідентифікатор користувача (за бажанням)
+          client_user_agent: data.user_data?.client_user_agent || req.headers['user-agent'], 
+          fbp: data.user_data?.fbp, 
+          fbc: data.user_data?.fbc, 
+          external_id: data.user_data?.external_id || "anonymous_user" 
         }
       }
     ],
-    test_event_code: "TEST10696" // Код тестової події для перевірки у Events Manager
+    test_event_code: "TEST10696"
   };
 
   try {
