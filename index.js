@@ -19,20 +19,42 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Маршрут для обробки POST запитів
-app.post('/api/pageView', (req, res) => {
-  console.log("📥 Incoming POST request");
+app.post('/api/pageView', async (req, res) => {
   const data = req.body;
 
   console.log('📥 Received data:', JSON.stringify(data));
 
-  res.json({
-    success: true,
-    message: 'Event received',
-    received: data
-  });
+  try {
+    const response = await axios.post(
+      `https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
+      data
+    );
+
+    console.log('✅ Sent to Facebook:', response.data);
+
+    res.json({
+      success: true,
+      message: 'Event received and sent to Facebook',
+      facebookResponse: response.data
+    });
+  } catch (error) {
+    console.error('❌ Facebook API error:', error.response?.data || error.message);
+
+    res.status(500).json({
+      success: false,
+      message: 'Failed to send to Facebook',
+      error: error.response?.data || error.message
+    });
+  }
 });
 
 // Старт сервера
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+
+
+
+
