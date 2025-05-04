@@ -43,25 +43,34 @@ app.post('/api/pageView', async (req, res) => {
   const data = req.body; // Тіло запиту, яке ми отримали з клієнта
 
   // Готуємо payload для Facebook
-  const payload = {
-    data: [
-      {
-        event_name: "PageView", 
-        event_time: Math.floor(Date.now() / 1000), 
-        action_source: "website", 
-        event_id: data.event_id || "event_" + Date.now(), 
-        user_data: {
-          client_user_agent: data.user_data?.client_user_agent || req.headers['user-agent'], 
-          fbp: data.user_data?.fbp, 
-          fbc: data.user_data?.fbc, 
-          external_id: data.user_data?.external_id || "anonymous_user" 
-        }
-      }
-    ],
-    test_event_code: "TEST10696"
-  };
+   // Отримання IP з заголовка або сокета
+   const ip =
+   req.headers['x-forwarded-for']?.split(',')[0] ||
+   req.socket?.remoteAddress ||
+   null;
 
-  try {
+ const payload = {
+   data: [
+     {
+       event_name: "PageView",
+       event_time: Math.floor(Date.now() / 1000),
+       action_source: "website",
+       event_id: data.event_id || "event_" + Date.now(),
+       user_data: {
+         client_user_agent: data.user_data?.client_user_agent || req.headers['user-agent'],
+         fbp: data.user_data?.fbp,
+         fbc: data.user_data?.fbc,
+         external_id: data.user_data?.external_id || "anonymous_user",
+         client_ip_address: ip // 👈 Додаємо IP-адресу
+       }
+     }
+   ],
+   test_event_code: "TEST10696"
+ };
+ // ✅ Виводимо у консоль перед відправкою
+   console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
+
+  /*try {
     // Відправляємо дані до Facebook через Conversions API
     const fbRes = await axios.post(
       `https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
@@ -83,7 +92,7 @@ app.post('/api/pageView', async (req, res) => {
       message: "Failed to send event to Facebook",
       error: err.response?.data || err.message
     });
-  }
+  }*/
 });
 
 // 🚀 Запуск сервера на вказаному порту
