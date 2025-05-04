@@ -19,18 +19,70 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Маршрут для обробки POST запитів
-app.post('/api/pageView', (req, res) => {
+app.post('/api/pageView1111', (req, res) => {
   console.log("📥 Incoming POST request");
   const data = req.body;
 
   console.log('📥 Received data:', JSON.stringify(data));
-
-  res.json({
+res.json({
     success: true,
     message: 'Event received',
     received: data
   });
 });
+
+
+
+app.post('/api/pageView', async (req, res) => {
+  console.log("📥 Incoming POST request");
+
+  const data = req.body;
+  console.log("📥 Received data:", JSON.stringify(data));
+
+  const payload = {
+    data: [
+      {
+        event_name: "PageView",
+        event_time: Math.floor(Date.now() / 1000),
+        action_source: "website",
+        event_id: data.event_id || "event_" + Date.now(),
+        user_data: {
+          client_user_agent: data.user_data?.client_user_agent || req.headers['user-agent'],
+          fbp: data.user_data?.fbp,
+          fbc: data.user_data?.fbc,
+          external_id: data.user_data?.external_id || "anonymous_user"
+        }
+      }
+    ],
+    test_event_code: "TEST39582"
+  };
+
+  try {
+    const fbRes = await axios.post(
+      `https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
+      payload,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    console.log("✅ Facebook response:", fbRes.data);
+    res.json({ success: true, fb: fbRes.data });
+
+  } catch (err) {
+    console.error("❌ Facebook error:", err.response?.data || err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send event to Facebook",
+      error: err.response?.data || err.message
+    });
+  }
+});
+
+
+
+
+
+
+
 
 // Старт сервера
 app.listen(port, () => {
