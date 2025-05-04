@@ -42,31 +42,32 @@ app.post('/api/pageView', async (req, res) => {
 
   const data = req.body; // Тіло запиту, яке ми отримали з клієнта
 
-  // Готуємо payload для Facebook
-   // Отримання IP з заголовка або сокета
-   const ip =
-   req.headers['x-forwarded-for']?.split(',')[0] ||
-   req.socket?.remoteAddress ||
-   null;
+  
+    // IP з заголовка або сокета
+  var ip =
+  req.headers['x-forwarded-for']?.split(',')[0] ||
+  req.socket?.remoteAddress ||
+  null;
 
- const payload = {
-   data: [
-     {
-       event_name: "PageView",
-       event_time: Math.floor(Date.now() / 1000),
-       action_source: "website",
-       event_id: data.event_id || "event_" + Date.now(),
-       user_data: {
-         client_user_agent: data.user_data?.client_user_agent || req.headers['user-agent'],
-         fbp: data.user_data?.fbp,
-         fbc: data.user_data?.fbc,
-         external_id: data.user_data?.external_id || "anonymous_user",
-         client_ip_address: ip // 👈 Додаємо IP-адресу
-       }
-     }
-   ],
-   test_event_code: "TEST10696"
- };
+  var payload = {
+    data: [
+      {
+        event_name: "PageView",
+        event_time: Math.floor(Date.now() / 1000),
+        action_source: "website",
+        event_id: data.event_id || "event_" + Date.now(),
+        user_data: {
+          client_user_agent: data.user_data?.client_user_agent || req.headers['user-agent'],
+          fbp: data.user_data?.fbp,
+          fbc: data.user_data?.fbc,
+          external_id: data.user_data?.external_id || "anonymous_user",
+          client_ip_address: ip
+        }
+      }
+    ],
+    test_event_code: "TEST10696"
+  };
+
  // ✅ Виводимо у консоль перед відправкою
    console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
 
