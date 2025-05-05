@@ -66,7 +66,7 @@ app.post('/api/pageView', async (req, res) => {
       }
     ],
     test_event_code: req.body?.test_event_code || "TEST10696"
-    1111111111
+    
   };
 
  // ✅ Виводимо у консоль перед відправкою
