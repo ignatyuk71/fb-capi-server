@@ -81,7 +81,7 @@ app.post('/api/pageView', async (req, res) => {
     );
 
     // Логуємо відповідь від Facebook
-    //console.log("✅ Facebook response:", fbRes.data);
+    console.log("✅ Facebook response (pageView):->", fbRes.data);
 
     // Відповідь клієнту
     res.json({ success: true, fb: fbRes.data });
@@ -140,7 +140,7 @@ app.post('/api/viewContent', async (req, res) => {
      test_event_code: req.body?.test_event_code || "TEST10696"
   };
 
-  console.log('📦 ViewContent payload to send:', JSON.stringify(payload, null, 2));
+  //console.log('📦 ViewContent payload to send:', JSON.stringify(payload, null, 2));
 
   try {
     const fbRes = await axios.post(
@@ -149,7 +149,7 @@ app.post('/api/viewContent', async (req, res) => {
       { headers: { 'Content-Type': 'application/json' } }
     );
 
-    console.log("✅ Facebook response (ViewContent):", fbRes.data);
+    console.log("✅ Facebook response (ViewContent):->", fbRes.data);
     
     res.json({ success: true, fb: fbRes.data });
 
