@@ -38,7 +38,7 @@ app.post('/api/pageView1111', (req, res) => {
 
 // 🎯 Основний маршрут — обробка події PageView та надсилання до Facebook API
 app.post('/api/pageView', async (req, res) => {
-  console.log("📥 Incoming POST request"); // Лог запиту
+  //console.log("📥 Incoming POST request"); // Лог запиту
 
   const data = req.body; // Тіло запиту, яке ми отримали з клієнта
   const event = req.body?.data?.[0] || {};
@@ -81,7 +81,7 @@ app.post('/api/pageView', async (req, res) => {
     );
 
     // Логуємо відповідь від Facebook
-    console.log("✅ Facebook response (pageView):->", fbRes.data);
+    console.log("✅ Facebook response (pageView):->");
 
     // Відповідь клієнту
     res.json({ success: true, fb: fbRes.data });
@@ -99,7 +99,7 @@ app.post('/api/pageView', async (req, res) => {
 
 // 🛒 ViewContent маршрут
 app.post('/api/viewContent', async (req, res) => {
-  console.log("📥 Incoming POST request: ViewContent");
+  //console.log("📥 Incoming POST request: ViewContent");
 
   const data = req.body;
   const event = req.body?.data?.[0] || {};
@@ -149,7 +149,7 @@ app.post('/api/viewContent', async (req, res) => {
       { headers: { 'Content-Type': 'application/json' } }
     );
 
-    console.log("✅ Facebook response (ViewContent):->", fbRes.data);
+    console.log("✅ Facebook response (ViewContent):->");
     
     res.json({ success: true, fb: fbRes.data });
 
