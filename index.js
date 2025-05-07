@@ -137,10 +137,30 @@ app.post('/api/viewContent', async (req, res) => {
         }
       }
     ],
-    test_event_code: req.body?.test_event_code || "TEST10696"
+    test_event_code: "TEST59526"
   };
 
   console.log('📦 ViewContent payload to send:', JSON.stringify(payload, null, 2));
+
+  try {
+    const fbRes = await axios.post(
+      `https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
+      payload,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    console.log("✅ Facebook response (ViewContent):", fbRes.data);
+    res.json({ success: true, fb: fbRes.data });
+
+  } catch (err) {
+    console.error("❌ Facebook error (ViewContent):", err.response?.data || err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send ViewContent to Facebook",
+      error: err.response?.data || err.message
+    });
+  }
+});
 
 // 🚀 Запуск сервера на вказаному порту
 app.listen(port, () => {
