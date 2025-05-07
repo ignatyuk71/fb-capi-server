@@ -70,7 +70,7 @@ app.post('/api/pageView', async (req, res) => {
   };
 
  // ✅ Виводимо у консоль перед відправкою
-   console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
+  // console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
 
   try {
     // Відправляємо дані до Facebook через Conversions API
@@ -96,6 +96,51 @@ app.post('/api/pageView', async (req, res) => {
     });
   }
 });
+
+// 🛒 ViewContent маршрут
+app.post('/api/viewContent', async (req, res) => {
+  console.log("📥 Incoming POST request: ViewContent");
+
+  const data = req.body;
+  const event = req.body?.data?.[0] || {};
+  const user = event.user_data || {};
+  const custom = event.custom_data || {};
+
+  const ip =
+    req.headers['x-forwarded-for']?.split(',')[0] ||
+    req.socket?.remoteAddress ||
+    null;
+
+  const payload = {
+    data: [
+      {
+        event_name: event.event_name || "ViewContent",
+        event_time: event.event_time || Math.floor(Date.now() / 1000),
+        action_source: event.action_source || "website",
+        event_id: event.event_id || "event_" + Date.now(),
+        event_source_url: event.event_source_url || req.headers.referer || "",
+        user_data: {
+          client_user_agent: user.client_user_agent || req.headers['user-agent'],
+          fbp: user.fbp,
+          fbc: user.fbc,
+          external_id: user.external_id || "anonymous_user",
+          client_ip_address: ip
+        },
+        custom_data: {
+          content_ids: custom.content_ids || [],
+          content_name: custom.content_name || "",
+          content_type: custom.content_type || "product",
+          content_category: custom.content_category || "",
+          contents: custom.contents || [],
+          value: custom.value || 0,
+          currency: custom.currency || "PLN"
+        }
+      }
+    ],
+    test_event_code: req.body?.test_event_code || "TEST10696"
+  };
+
+  console.log('📦 ViewContent payload to send:', JSON.stringify(payload, null, 2));
 
 // 🚀 Запуск сервера на вказаному порту
 app.listen(port, () => {
