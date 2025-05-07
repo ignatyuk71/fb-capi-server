@@ -70,7 +70,7 @@ app.post('/api/pageView', async (req, res) => {
   };
 
  // ✅ Виводимо у консоль перед відправкою
-   console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
+  // console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
 
   try {
     // Відправляємо дані до Facebook через Conversions API
@@ -140,7 +140,7 @@ app.post('/api/viewContent', async (req, res) => {
      test_event_code: req.body?.test_event_code || "TEST10696"
   };
 
-  console.log('📦 ViewContent payload to send:', JSON.stringify(payload, null, 2));
+  //console.log('📦 ViewContent payload to send:', JSON.stringify(payload, null, 2));
 
   try {
     const fbRes = await axios.post(
