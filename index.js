@@ -137,7 +137,7 @@ app.post('/api/viewContent', async (req, res) => {
         }
       }
     ],
-    test_event_code: "TEST59526"
+     test_event_code: req.body?.test_event_code || "TEST10696"
   };
 
   console.log('📦 ViewContent payload to send:', JSON.stringify(payload, null, 2));
