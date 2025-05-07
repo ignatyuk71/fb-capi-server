@@ -81,7 +81,7 @@ app.post('/api/pageView', async (req, res) => {
     );
 
     // Логуємо відповідь від Facebook
-    console.log("✅ Facebook response:", fbRes.data);
+    //console.log("✅ Facebook response:", fbRes.data);
 
     // Відповідь клієнту
     res.json({ success: true, fb: fbRes.data });
@@ -150,6 +150,7 @@ app.post('/api/viewContent', async (req, res) => {
     );
 
     console.log("✅ Facebook response (ViewContent):", fbRes.data);
+    
     res.json({ success: true, fb: fbRes.data });
 
   } catch (err) {
