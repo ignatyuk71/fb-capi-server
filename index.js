@@ -70,7 +70,7 @@ app.post('/api/pageView', async (req, res) => {
   };
 
  // ✅ Виводимо у консоль перед відправкою
-  // console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
+   console.log('📦 eventData to send:', JSON.stringify(payload, null, 2));
 
   try {
     // Відправляємо дані до Facebook через Conversions API
