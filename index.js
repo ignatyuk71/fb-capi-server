@@ -274,6 +274,8 @@ app.post('/api/purchase', async (req, res) => {
     test_event_code: data?.test_event_code || "TEST20618"
   };
 
+  console.log('\u{1F4E6} AddToCart payload to send:', JSON.stringify(payload, null, 2));
+
   try {
     const fbRes = await axios.post(
       `https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
