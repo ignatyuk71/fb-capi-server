@@ -207,7 +207,7 @@ app.post('/api/addToCart', async (req, res) => {
     test_event_code: data?.test_event_code || "TEST20618"
   };
 
-  console.log('\u{1F4E6} AddToCart payload to send:', JSON.stringify(payload, null, 2));
+  //console.log('\u{1F4E6} AddToCart payload to send:', JSON.stringify(payload, null, 2));
 
   try {
     const fbRes = await axios.post(
@@ -216,7 +216,7 @@ app.post('/api/addToCart', async (req, res) => {
       { headers: { 'Content-Type': 'application/json' } }
     );
 
-    console.log("\u2705 Facebook response (AddToCart):", fbRes.data);
+    console.log("\u2705 Facebook response (AddToCart)->");
     res.json({ success: true, fb: fbRes.data });
   } catch (err) {
     console.error("\u274C Facebook error (AddToCart):", err.response?.data || err.message);
