@@ -163,6 +163,73 @@ app.post('/api/viewContent', async (req, res) => {
   }
 });
 
+
+// ✅ AddToCart маршрут на сервері
+app.post('/api/addToCart', async (req, res) => {
+  console.log("\u{1F4E5} Incoming POST request: AddToCart");
+
+  const data = req.body;
+  const event = data?.data?.[0] || {};
+  const user = event.user_data || {};
+  const custom = event.custom_data || {};
+
+  const ip =
+    req.headers['x-forwarded-for']?.split(',')[0] ||
+    req.socket?.remoteAddress ||
+    null;
+
+  const payload = {
+    data: [
+      {
+        event_name: event.event_name || "AddToCart",
+        event_time: event.event_time || Math.floor(Date.now() / 1000),
+        event_id: event.event_id || "event_" + Date.now(),
+        action_source: event.action_source || "website",
+        event_source_url: event.event_source_url || req.headers.referer || "",
+        user_data: {
+          fbp: user.fbp,
+          fbc: user.fbc,
+          external_id: user.external_id || "anonymous_user",
+          client_user_agent: user.client_user_agent || req.headers['user-agent'],
+          client_ip_address: ip
+        },
+        custom_data: {
+          content_ids: custom.content_ids || [],
+          content_name: custom.content_name || "",
+          content_type: custom.content_type || "product",
+          content_category: custom.content_category || "",
+          contents: custom.contents || [],
+          value: custom.value || 0,
+          currency: custom.currency || "PLN"
+        }
+      }
+    ],
+    test_event_code: data?.test_event_code || "TEST20618"
+  };
+
+  console.log('\u{1F4E6} AddToCart payload to send:', JSON.stringify(payload, null, 2));
+
+  try {
+    const fbRes = await axios.post(
+      `https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`,
+      payload,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    console.log("\u2705 Facebook response (AddToCart):", fbRes.data);
+    res.json({ success: true, fb: fbRes.data });
+  } catch (err) {
+    console.error("\u274C Facebook error (AddToCart):", err.response?.data || err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send AddToCart to Facebook",
+      error: err.response?.data || err.message
+    });
+  }
+});
+
+
+
 // 🚀 Запуск сервера на вказаному порту
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
