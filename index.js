@@ -207,7 +207,7 @@ app.post('/api/addToCart', async (req, res) => {
     test_event_code: data?.test_event_code || "TEST20618"
   };
 
-  console.log('\u{1F4E6} AddToCart payload to send:', JSON.stringify(payload, null, 2));
+  //console.log('\u{1F4E6} AddToCart payload to send:', JSON.stringify(payload, null, 2));
 
   try {
     const fbRes = await axios.post(
